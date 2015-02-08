@@ -1,59 +1,6 @@
 #ifndef HIDRD_HPP
 #define HIDRD_HPP
 
-// This header file contains type definitions that can be used to
-// build HID report descriptors as per specifications:
-//     USB HID definition v1.11 - the structure of the binary report
-//     USB HID Usage Tables v1.12 - detailed field descriptions
-
-// Written in C++11 language standard.
-
-// The main purpose is to provide type safe building of the binary
-// descriptor that would otherwise be quite complex and error-prone to
-// build. The central type is the type Descriptor that takes items as
-// its template parameters. Its primary template is:
-//
-//     template <typename... Items> struct Descriptor;
-//
-// Individual items are defined separately and most of them take further data arguments.
-
-// Brief (incomplete) example usage:
-//
-//     #include <hidrd.hpp>
-//     using namespace hidrd;
-//     using namespace hidrd::itemdata;
-//
-//     typedef Descriptor<
-//         UsagePage<args::GenericDesktop>,
-//         GenericDesktop<args::Mouse>,
-//         ReportId<1>,
-//         Collection<args::Application>,
-//         GenericDesktop<args::Pointer>,
-//         ...
-//         EndCollection> MouseDescriptor;
-//
-//     // Do something with its binary data
-//     publishDescriptor(MouseDescriptor::data);
-
-// Features:
-// - compile time byte array for the descriptor data
-// - supports only Short Items (1-5 bytes)
-// - type safe data for items, i.e. UsagePage<Pointer> leads to compiler error
-// - automatically packs data arguments using the least amount of bytes
-
-// It doesn't check everything for you. You still have to pay
-// attention to the basic descriptor building rules. Some gotchas to
-// keep an eye on:
-//
-// - valid item scopes
-// - ending collections
-// - check logical min/max value against ReportSize value
-// - only use usages that belong to the current usage page
-//
-// It may be possible for some or all of these to be enforced by
-// adding more hierarchically structured types that span multiple
-// items.
-
 #include <cstdint>
 #include "bytes.hpp"
 #include "typechain.hpp"
