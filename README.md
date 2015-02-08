@@ -41,6 +41,11 @@ It may be possible for some or all of these to be enforced by
 adding more hierarchically structured types that span multiple
 items.
 
+Also, the coverage for Short Items is far from complete but the
+framework is there. I've only tested it with a rather simple
+descriptor made for a mouse (see `./tests/descriptor.cpp`.)
+
+If something is missing, request it, stay tuned, or help out ;)
 
 ## Requirements
 
