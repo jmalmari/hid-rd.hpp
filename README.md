@@ -1,4 +1,4 @@
-# hid-rd
+# hid-rd.hpp
 
 ## Intro
 
@@ -20,7 +20,7 @@ Related specifications:
 
 ## Features
 
-Some of the features offered by hid-rd are:
+Some of the features offered are:
 
 - compile time byte array for the descriptor data
 - supports only Short Items (1-5 bytes)
