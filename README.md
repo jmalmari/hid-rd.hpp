@@ -20,8 +20,6 @@ Related specifications:
 
 ## Features
 
-Some of the features offered are:
-
 - compile time byte array for the descriptor data
 - supports only Short Items (1-5 bytes)
 - type safe data for items, e.g. UsagePage with argument Pointer leads
@@ -104,3 +102,6 @@ The data member is an `std::array<uint8_t, N>` array.
 
 1. cmake
 2. make check
+
+Because of the compile time nature of the code-under-test, a major
+role in the tests is that they actually compile.
