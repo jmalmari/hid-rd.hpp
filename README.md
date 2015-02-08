@@ -51,6 +51,13 @@ If something is missing, request it, stay tuned, or help out ;)
 
 Compiler with C++11 enabled. For tests, you need CMake.
 
+At the time of writing, the only thing needed from actual C++11
+**library** is the new `std::array` type which is quite trivial to
+change to basic C-style array. All the rest is just new syntax. This
+means that you may be able to use the header (with the aforementioned
+minor modification) even with older platforms, given that you have a
+new enough compiler.
+
 ## Usage (no pun intended)
 
 ### Use in your project
