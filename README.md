@@ -24,8 +24,8 @@ Some of the features offered are:
 
 - compile time byte array for the descriptor data
 - supports only Short Items (1-5 bytes)
-- type safe data for items, e.g. UsagePage with argument Pointer
-  leads to compiler error (*usage* type, not *usage page* type)
+- type safe data for items, e.g. UsagePage with argument Pointer leads
+  to compiler error (Pointer is *usage*, not *usage page*)
 - automatically packs data arguments using the least amount of bytes
 
 It doesn't check everything for you. You still have to pay attention
