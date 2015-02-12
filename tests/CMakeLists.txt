@@ -5,7 +5,7 @@ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 include_directories(${HIDRD_SOURCE_DIR}/include)
 
 macro(addExeTest tname)
-  add_executable(${tname}-testapp EXCLUDE_FROM_ALL ${ARGN})
+  add_executable(${tname}-testapp ${ARGN})
   add_test(${tname} ${tname}-testapp)
   add_dependencies(check ${tname}-testapp)
 endmacro()
