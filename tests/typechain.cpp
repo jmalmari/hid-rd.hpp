@@ -1,6 +1,6 @@
 #include "hidrd/typechain.hpp"
 
-using namespace typechain;
+using namespace hidrd::typechain;
 
 enum Level0_Data
 {

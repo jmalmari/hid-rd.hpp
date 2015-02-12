@@ -3,7 +3,7 @@
 
 #include <cstddef>
 
-namespace typechain {
+namespace hidrd { namespace typechain {
 
 template <typename T> struct Root
 {
@@ -29,6 +29,6 @@ template <typename T> struct NodeCount<Root<T>>
     constexpr static const std::size_t Result = 0;
 };
 
-}
+}}
 
 #endif

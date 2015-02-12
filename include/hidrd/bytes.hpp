@@ -3,6 +3,8 @@
 
 #include <array>
 
+namespace hidrd { namespace bytes {
+
 template <uint8_t data> struct Byte
 {
     constexpr static const uint8_t Data = data;
@@ -59,5 +61,7 @@ template <uint8_t... args> struct Bytes<_flat<Byte<args>...>>
 
 template <uint8_t... args> constexpr const std::array<uint8_t, sizeof...(args)>
 Bytes<_flat<Byte<args>...>>::data;
+
+}}
 
 #endif

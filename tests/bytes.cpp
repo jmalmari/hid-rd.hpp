@@ -3,6 +3,9 @@
 #include <cstring>
 #include "hidrd/bytes.hpp"
 
+using hidrd::bytes::Bytes;
+using hidrd::bytes::Byte;
+
 typedef Bytes< Byte<'a'>,
                Byte<'b'>,
                Byte<'c'>,

@@ -131,6 +131,9 @@ constexpr uint8_t item_hdr_local(itemdata::tags::Local tag, itemdata::DataSize s
     return make_hid_item_hdr(size, itemdata::LocalItem, tag);
 }
 
+using bytes::Bytes;
+using bytes::Byte;
+
 
 // ValueSerializer makes a byte list from numeric data. Numeric data
 // is represented by a generic type that has a Value data member.
