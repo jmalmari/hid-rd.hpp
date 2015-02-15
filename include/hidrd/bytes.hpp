@@ -1,7 +1,9 @@
 #ifndef BYTES_HPP
 #define BYTES_HPP
 
+#ifndef BYTES_USE_CSTYLE_ARRAY
 #include <array>
+#endif
 
 namespace hidrd { namespace bytes {
 
@@ -56,11 +58,22 @@ struct Bytes<_flat<Byte<arg1>...>, Byte<arg2>, Rhs...>
 template <uint8_t... args> struct Bytes<_flat<Byte<args>...>>
 {
     typedef Bytes<_flat<Byte<args>...>> Flatten;
+
+    constexpr static const std::size_t Size = sizeof...(args);
+
+#ifdef BYTES_USE_CSTYLE_ARRAY
+    constexpr static const uint8_t data[] = { args... };
+#else
     constexpr static const std::array<uint8_t, sizeof...(args)> data = { args... };
+#endif
 };
 
+#ifdef BYTES_USE_CSTYLE_ARRAY
+template <uint8_t... args> constexpr const uint8_t Bytes<_flat<Byte<args>...>>::data[];
+#else
 template <uint8_t... args> constexpr const std::array<uint8_t, sizeof...(args)>
 Bytes<_flat<Byte<args>...>>::data;
+#endif
 
 }}
 
