@@ -5,11 +5,12 @@
 
 using namespace hidrd;
 using namespace hidrd::itemdata;
+using ByteType = hidrd::bytes::ByteType;
 
 template <typename... Types> constexpr auto make_array(Types... args)
-    -> std::array<uint8_t, sizeof...(args)>
+    -> std::array<ByteType, sizeof...(args)>
 {
-    return { static_cast<uint8_t>(args)... };
+    return { static_cast<ByteType>(args)... };
 }
 
 auto const ReferenceDescriptor = make_array(
@@ -136,8 +137,8 @@ typedef Descriptor<
 
 
 template <std::size_t N1, std::size_t N2>
-bool compareByteByByte(std::array<uint8_t, N1> const& refdata,
-                       std::array<uint8_t, N2> const& data)
+bool compareByteByByte(std::array<ByteType, N1> const& refdata,
+                       std::array<ByteType, N2> const& data)
 {
     std::size_t minsize = std::min(N1, N2);
 
@@ -163,8 +164,8 @@ bool compareByteByByte(std::array<uint8_t, N1> const& refdata,
 }
 
 template <std::size_t N1, std::size_t N2>
-bool compare(std::array<uint8_t, N1> const& refdata,
-             std::array<uint8_t, N2> const& data)
+bool compare(std::array<ByteType, N1> const& refdata,
+             std::array<ByteType, N2> const& data)
 {
     if (!compareByteByByte(refdata, data))
     {

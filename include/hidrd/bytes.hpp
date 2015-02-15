@@ -7,9 +7,11 @@
 
 namespace hidrd { namespace bytes {
 
-template <uint8_t data> struct Byte
+typedef unsigned char ByteType;
+
+template <ByteType data> struct Byte
 {
-    constexpr static const uint8_t Data = data;
+    constexpr static const ByteType Data = data;
 };
 
 template <typename...> struct Bytes;
@@ -26,7 +28,7 @@ struct Bytes<Bytes<Inner...>, Rhs...>
     typedef typename Bytes<Inner..., Rhs...>::Flatten Flatten;
 };
 
-template <uint8_t lhs, typename... Rhs>
+template <ByteType lhs, typename... Rhs>
 struct Bytes<Byte<lhs>, Rhs...>
 {
     typedef typename Bytes<_flat<Byte<lhs> >,
@@ -36,7 +38,7 @@ struct Bytes<Byte<lhs>, Rhs...>
 // Inner Bytes specializations, populating _flat<> from right hand args
 
 // append another Bytes<> list
-template <uint8_t... arg1, typename... BytesValue, typename... Rhs>
+template <ByteType... arg1, typename... BytesValue, typename... Rhs>
 struct Bytes<_flat<Byte<arg1>...>, Bytes<BytesValue...>, Rhs...>
 {
     typedef typename Bytes<
@@ -46,7 +48,7 @@ struct Bytes<_flat<Byte<arg1>...>, Bytes<BytesValue...>, Rhs...>
 };
 
 // append a single Byte<>
-template <uint8_t... arg1, uint8_t arg2, typename... Rhs>
+template <ByteType... arg1, ByteType arg2, typename... Rhs>
 struct Bytes<_flat<Byte<arg1>...>, Byte<arg2>, Rhs...>
 {
     typedef typename Bytes<
@@ -55,24 +57,24 @@ struct Bytes<_flat<Byte<arg1>...>, Byte<arg2>, Rhs...>
 };
 
 // end of Bytes recursion: single _flat<>
-template <uint8_t... args> struct Bytes<_flat<Byte<args>...>>
+template <ByteType... args> struct Bytes<_flat<Byte<args>...>>
 {
     typedef Bytes<_flat<Byte<args>...>> Flatten;
 
     constexpr static const std::size_t Size = sizeof...(args);
 
 #ifdef BYTES_USE_CSTYLE_ARRAY
-    constexpr static const uint8_t data[] = { args... };
+    constexpr static const ByteType data[] = { args... };
 #else
-    constexpr static const std::array<uint8_t, sizeof...(args)> data = { args... };
+    constexpr static const std::array<ByteType, sizeof...(args)> data = { args... };
 #endif
 };
 
 #ifdef BYTES_USE_CSTYLE_ARRAY
-template <uint8_t... args> constexpr const uint8_t Bytes<_flat<Byte<args>...>>::data[];
+template <ByteType... args> constexpr const ByteType Bytes<_flat<Byte<args>...>>::data[];
 #else
-template <uint8_t... args> constexpr const std::array<uint8_t, sizeof...(args)>
-Bytes<_flat<Byte<args>...>>::data;
+template <ByteType... args> constexpr const std::array<ByteType, sizeof...(args)>
+    Bytes<_flat<Byte<args>...>>::data;
 #endif
 
 }}

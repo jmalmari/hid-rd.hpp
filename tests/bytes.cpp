@@ -5,6 +5,7 @@
 
 using hidrd::bytes::Bytes;
 using hidrd::bytes::Byte;
+using hidrd::bytes::ByteType;
 
 typedef Bytes< Byte<'a'>,
                Byte<'b'>,
@@ -52,7 +53,7 @@ struct TestItem
 {
     std::string name;
     std::string expected;
-    uint8_t const * const data;
+    ByteType const * const data;
     std::size_t dataSize;
 };
 
@@ -83,7 +84,7 @@ int main(int, char*[])
             std::cout << "Data don't match. Expected " << item.expected << ", got:\n";
             for (std::size_t i = 0; i < item.dataSize; ++i)
             {
-                uint8_t byte = item.data[i];
+                ByteType byte = item.data[i];
                 std::cout << std::hex << "0x" << (0xff & byte) << "(" << byte << ") ";
             }
             std::cout << std::endl;
