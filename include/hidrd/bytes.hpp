@@ -1,6 +1,8 @@
 #ifndef BYTES_HPP
 #define BYTES_HPP
 
+#include <cstddef>
+
 #ifndef BYTES_USE_CSTYLE_ARRAY
 #include <array>
 #endif
