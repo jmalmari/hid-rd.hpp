@@ -49,16 +49,11 @@ If something is missing, request it, stay tuned, or help out ;)
 
 Compiler with C++11 enabled. For tests, you need CMake.
 
-At the time of writing, the only thing needed from actual C++11
-**library** is the new `std::array` type which is quite trivial to
-change to basic C-style array. All the rest is just new syntax. This
-means that you may be able to use the header (with the aforementioned
-minor modification) even with older platforms, given that you have a
-new enough compiler.
+The C++11 requirement doesn't necessarily mean that you couldn't
+include the report descriptor in your build process for target
+platforms that don't have C++11. More on this below.
 
 ## Usage (no pun intended)
-
-### Use in your project
 
 All code resides in header files so no need for a separate build
 step. Just add `./include` to your project's include path and then
@@ -98,10 +93,87 @@ Brief (and incomplete) example usage:
 
 The data member is an `std::array<uint8_t, N>` array.
 
-### Run tests
+### No C++(11) for your target platform?
+
+I suspect many potential users writing report descriptors are actually
+targeting platforms that don't have C++ support, let alone
+C++11. However, a specialized build step might still work as long as
+you have a C++11 compiler on your build system.
+
+#### Export to a binary file
+
+It's trivial to generate a binary file out of the descriptor. For an
+example, check `examples/dump.cpp`.
+
+If a C header file is wanted, it's possible to convert the binary file
+with other tools that exists out there. But then you might want to
+rethink whether you want to use those other tools from the get-go.
+
+#### Use C++11 for only one translation unit
+
+*"Doesn't this defeat the purpose of avoiding C++11?"*
+
+Partly, maybe. But it's possible to drop the dependency on the actual
+C++11 *library* and only use C++11 *language* features which can make
+all the difference. You only have to ensure that the C++ compiler
+generates compatible code.
+
+1. Drop standard library dependencies
+
+    Define `BYTES_USE_CSTYLE_ARRAY` which makes the code use regular
+    C-style array instead of an `std::array`.
+
+2. Expose symbols for the descriptor data
+
+    The data array and size can be defined as globals for other
+    translation units to use. Make sure all C++(11) symbols have
+    internal linkage.
+
+3. Compile into your program
+
+    Most build tools allow you to define a different compiler for
+    specific code file. Compile your descriptor .cpp file with C++11
+    compiler and link as normal.
+
+    If you're cross compiling, I recommend using Clang's C++ compiler
+    since it has built-in support for many targets, depending on its
+    configuration.
+
+Here's an example for a C application:
+
+    #define BYTES_USE_CSTYLE_ARRAY
+    #include <hidrd/hidrd.hpp>
+
+    namespace {
+        typedef Descriptor<... your items here ...> MyDescriptor;
+    }
+
+    extern "C"
+    unsigned int FetchDescriptor(unsigned char const **data)
+    {
+        *data = &MyDescriptor::data[0];
+        return MyDescriptor::Size;
+    }
+
+and refer to them like so:
+
+    extern unsigned int FetchDescriptor(unsigned char const **data);
+
+For a C++ application, you could define:
+
+    extern std::size_t const DescriptorDataSize = MyDescriptor::Size;
+    unsigned char const (&DescriptorData)[MyDescriptor::Size] = MyDescriptor::data;
+
+and refer to them like so:
+
+    extern std::size_t const DescriptorDataSize;
+    extern unsigned char const (&DescriptorData)[];
+
+
+## Run tests
 
 1. cmake
 2. make check
 
-Because of the compile time nature of the code-under-test, a major
-role in the tests is that they actually compile.
+Because of the compile time nature of the code, a major role in the
+tests is that they actually compile.
