@@ -91,7 +91,7 @@ Brief (and incomplete) example usage:
     // Do something with its binary data
     publishDescriptor(MouseDescriptor::data);
 
-The data member is an `std::array<uint8_t, N>` array.
+The data member is an `std::array<unsigned char, N>` array.
 
 ### No C++(11) for your target platform?
 
