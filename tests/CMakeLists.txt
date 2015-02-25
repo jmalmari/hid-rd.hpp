@@ -12,4 +12,5 @@ endmacro()
 
 addExeTest(bytes bytes.cpp)
 addExeTest(typechain typechain.cpp)
+addExeTest(itemsize itemsize.cpp)
 addExeTest(descriptor descriptor.cpp)

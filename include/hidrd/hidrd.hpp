@@ -2,6 +2,7 @@
 #define HIDRD_HPP
 
 #include <cstdint>
+#include <type_traits>
 #include "bytes.hpp"
 #include "typechain.hpp"
 
@@ -180,12 +181,38 @@ template <typename Leaf> struct Item<Leaf, 2>
     using TypeNode = typename TagNode::ParentNode;
 };
 
+
+// Hid specification v1.11 mentions that some items in the descriptor
+// are unsigned. However, many are left without the sign
+// specified. Hence, it is difficult to derive the rules for how many
+// bytes each numeric argument should take.
+//
+// For now, determining the size is divided to signed and unsigned
+// numbers, instead of based on item types.
+
 template <typename T> struct DataNodeSize
 {
-    // going with the assumption we're always using unsigned numbers
+    template <typename Int>
+    constexpr static itemdata::DataSize sizeOfUnsigned(Int value)
+    {
+        return value < 0x100 ? itemdata::OneByte : (
+            value < 0x10000 ? itemdata::TwoBytes : itemdata::FourBytes);
+    }
+    template <typename Int>
+    constexpr static itemdata::DataSize sizeOfSigned(Int value)
+    {
+        return value < 0 ? sizeOfSignedPos(~value) : sizeOfSignedPos(value);
+    }
+    template <typename Int>
+    constexpr static itemdata::DataSize sizeOfSignedPos(Int value)
+    {
+        return value < 0x80 ? itemdata::OneByte : (
+            value < 0x8000 ? itemdata::TwoBytes : itemdata::FourBytes);
+    }
+
     constexpr static const itemdata::DataSize Result =
-        T::Value < 0x100 ? itemdata::OneByte : (
-            T::Value < 0x10000 ? itemdata::TwoBytes : itemdata::FourBytes);
+        std::is_signed<decltype(T::Value)>::value ?
+        sizeOfSigned(T::Value) : sizeOfUnsigned(T::Value);
 };
 template <> struct DataNodeSize<EmptyDataNode>
 {
